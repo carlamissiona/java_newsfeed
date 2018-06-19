@@ -10,7 +10,9 @@ public interface UserDao {
     
     int deleteUser(int userid);
     
-    int editUser(User u);
+    void editUser(User u);
+   
+   User readUserByEmail(String email);
        
     
 }

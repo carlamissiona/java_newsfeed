@@ -9,6 +9,9 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.eclipse.che.springer.dao.UserImpl;
+import com.eclipse.che.springer.dao.UserDao;
+
+import com.eclipse.che.springer.dto.User;
   
 
 import java.util.List;
@@ -22,17 +25,20 @@ public class AdminController implements Controller
 {
 
    @Autowired
-	private UserDao serDao;
+	private UserImpl userUtil;
 	
    @Override
    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception
    {
-    
+       
+      
+        User u =  this.userUtil.readUser(1);
         
         ModelAndView view = new ModelAndView("login"); 
             
-        view.addObject("data",request.getParameter("data"));
+             
         
-        return view;
+        return view;   
+
    }
 }

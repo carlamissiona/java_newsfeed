@@ -2,12 +2,12 @@ package com.eclipse.che.springer.dto;
 
 
 public class User {
-	private int id;
-	private String firstname;
-	private String lastname;
-	private String email;
-	private String password;
-	private int isAdmin;
+	private int id = 0;
+	private String firstname ="";
+	private String lastname ="";
+	private String email ="";
+	private String password ="";
+	private int isAdmin = 0;
 	
 	public int getIsAdmin() {
 		return this.isAdmin;

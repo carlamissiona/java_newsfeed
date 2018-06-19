@@ -25,14 +25,16 @@ public class UserImpl implements UserDao {
 
 	@Override
 	public int addUser(User user) {
-		int id = user.getId();
+	 
 		String fname = user.getFirstname();
 		String email = user.getEmail();
-		int rows = jdbcTemplate.update("insert into User values(?,?,?)", id,fname, email);
-
-		return rows;
+		String password = user.getPassword();
+		String lname = user.getLastname();
+		int isadmin = user.getIsAdmin();
+		int rows = jdbcTemplate.update("insert into User (firstname, lastname, password, email, isadmin, islogin) values (?,?,?,?,?,?); ", fname, lname, password, email, isadmin, 1 );
+        return rows;
 	}
-
+  
 	@Override
 	public int deleteUser(int userId) {
 		String query = "DELETE from User where id=?";
@@ -41,7 +43,7 @@ public class UserImpl implements UserDao {
 	}
 
 	@Override
-	public void updateUser(User User) {
+	public void editUser(User user) {
 		String qs = "UPDATE User SET password=?,email=? WHERE id=?";
 		jdbcTemplate.update(qs,
 				new Object[] { 
@@ -49,11 +51,30 @@ public class UserImpl implements UserDao {
 						});
 
 	}
+   
+
+	@Override 
+	public User readUserByEmail(String email) {
+		final User user = new User();
+		String qs = "SELECT id, firstname, lastname, email FROM User WHERE email='" + email+"'";
+		return (User) jdbcTemplate.query(qs, new ResultSetExtractor<User>() {
+			public User extractData(ResultSet rs) throws SQLException, DataAccessException {
+				if (rs.next()) {
+					user.setId(rs.getInt(1));
+					user.setFirstname(rs.getString(2));
+					user.setLastname(rs.getString(3));
+					user.setEmail(rs.getString(4));
+				}
+				return user;
+			}
+		});
+	
+    }
 
 	@Override
 	public User readUser(int userId) {
 		final User user = new User();
-		String qs = "SELECT id, firstname, email FROM User WHERE id='" + userId+"'";
+		String qs = "SELECT id, firstname, email FROM User WHERE id=" + userId+"";
 		return (User) jdbcTemplate.query(qs, new ResultSetExtractor<User>() {
 			public User extractData(ResultSet rs) throws SQLException, DataAccessException {
 				if (rs.next()) {
